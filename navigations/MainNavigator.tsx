@@ -6,7 +6,6 @@ import { createDrawerNavigator } from "@react-navigation/drawer"
 import { NavigationContainer } from "@react-navigation/native"
 import PerfilScreen from "../screens/PerfilScreen"
 import HistorialTrabajosScreen from "../screens/HistorialTrabajosScreen"
-import GanaciasScreen from "../screens/GanaciasScreen"
 import ListaPedidosScreen from "../screens/ListaPedidosScreen"
 import SoporteScreen from "../screens/SoporteScreen"
 
@@ -28,7 +27,6 @@ function MyDrawer() {
         <Drawer.Navigator >
             <Drawer.Screen name="Perfil" component={PerfilScreen} />
             <Drawer.Screen name="HistorialTrabajos" component={HistorialTrabajosScreen} />
-            <Drawer.Screen name="Ganacias" component={GanaciasScreen} />
             <Drawer.Screen name="ListaPedidos" component={ListaPedidosScreen} />
             <Drawer.Screen name="Soporte" component={SoporteScreen} />
         </Drawer.Navigator>

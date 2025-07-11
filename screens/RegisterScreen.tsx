@@ -1,9 +1,8 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView } from 'react-native'
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { supabase } from '../supabase/Config'
 
 export default function RegisterScreen({ navigation }: any) {
-
     const [cedula, setcedula] = useState("")
     const [nombre, setnombre] = useState("")
     const [apellido, setapellido] = useState("")
@@ -14,22 +13,78 @@ export default function RegisterScreen({ navigation }: any) {
     const [confirmarContrasenia, setconfirmarContrasenia] = useState("")
     const [tipoUsuario, settipoUsuario] = useState("servidor")
 
-    async function guardar() {
+    async function guardar(uid: string) {
         const { error } = await supabase
             .from('usuario')
-            .insert(
-                {
-                    cedula: cedula,
-                    nombre: nombre,
-                    apellido:apellido,
-                    fechaNacimiento:fechaNacimiento,
-                    correo: correo,
-                    celular:celular,
-                    contrasenia:contrasenia,
-                    tipoUsuario:tipoUsuario
-                }
-            )
-        console.log(error);
+            .insert({
+                id: uid,
+                cedula: cedula.trim(),
+                nombre: nombre.trim(),
+                apellido: apellido.trim(),
+                fechaNacimiento: fechaNacimiento.trim(),
+                correo: correo.trim(),
+                celular: celular.trim(),
+                tipoUsuario: tipoUsuario
+            })
+        if (error) {
+            console.log("Error al guardar en Supabase:", error.message)
+            Alert.alert("Error", "No se pudo guardar el usuario en la base de datos.")
+            alert("No se pudo guardar el usuario en la base de datos.")
+        }
+    }
+
+    async function registro() {
+        // Validaciones básicas
+        if (
+            !cedula || !nombre || !apellido || !fechaNacimiento || !correo ||
+            !celular || !contrasenia || !confirmarContrasenia
+        ) {
+            Alert.alert("Error", "Todos los campos son obligatorios");
+            alert("Todos los campos son obligatorios");
+            return;
+        }
+
+        // Validar formato de correo
+        const email = correo.trim().replace(/^"|"$/g, '');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            Alert.alert("Error", "Correo electrónico inválido");
+            alert("Correo electrónico inválido");
+            return;
+        }
+
+        // Validar contraseñas
+        if (contrasenia.trim().length < 6) {
+            Alert.alert("Error", "La contraseña debe tener al menos 6 caracteres");
+            alert("La contraseña debe tener al menos 6 caracteres");
+            return;
+        }
+
+        if (contrasenia !== confirmarContrasenia) {
+            Alert.alert("Error", "Las contraseñas no coinciden");
+            alert("Las contraseñas no coinciden");
+            return;
+        }
+
+        // Registro con Supabase Auth
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: contrasenia.trim(),
+        })
+
+        if (error) {
+            console.log("Error en signUp:", error.message)
+            Alert.alert("Error", error.message)
+            alert("Error")
+            return;
+        }
+
+        if (data?.user) {
+            await guardar(data.user.id)
+            Alert.alert("Éxito", "Usuario registrado correctamente")
+            alert("Usuario registrado correctamente")
+            navigation.navigate('Login')
+        }
     }
 
     return (
@@ -72,6 +127,7 @@ export default function RegisterScreen({ navigation }: any) {
                 style={styles.input}
                 onChangeText={setcorreo}
                 keyboardType='email-address'
+                autoCapitalize='none'
             />
 
             <Text style={styles.label}>Celular:</Text>
@@ -98,7 +154,7 @@ export default function RegisterScreen({ navigation }: any) {
                 secureTextEntry
             />
 
-            <TouchableOpacity style={styles.boton} onPress={()=>guardar()}>
+            <TouchableOpacity style={styles.boton} onPress={registro}>
                 <Text style={styles.botonTexto}>Registrar</Text>
             </TouchableOpacity>
 
@@ -171,3 +227,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 })
+

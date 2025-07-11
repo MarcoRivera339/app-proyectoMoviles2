@@ -17,10 +17,7 @@ export default function SoporteScreen({ navigation }: any) {
         <Text style={styles.label}>⏰ Horarios de atención:</Text>
         <Text style={styles.texto}>Lunes a Viernes, de 08h00 a 18h00</Text>
       </View>
-
-      <TouchableOpacity style={styles.botonCancelar} onPress={() => navigation.goBack()}>
-        <Text style={styles.botonTextoCancelar}>Regresar</Text>
-      </TouchableOpacity>
+      
     </ScrollView>
   )
 }
