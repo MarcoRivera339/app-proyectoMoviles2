@@ -1,0 +1,12 @@
+{
+    "build": {
+        "production": {
+            "channel": "production",
+            "android": { "gradleCommand": ":app:assembleRelease" },
+            "ios": { "buildConfiguration": "Release" }
+        }
+    },
+    "submit": {  }
+
+
+}

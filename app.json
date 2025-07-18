@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "app-proyecto",
+    "name": "Master Clean",
     "slug": "app-proyecto",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/cleaning.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/cleaning.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,13 +17,28 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/cleaning1.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.marcorivera339.appproyecto"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./assets/cleaning2.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "81af05ea-4fe1-48cb-a112-ccfc49f6641c"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/81af05ea-4fe1-48cb-a112-ccfc49f6641c"
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }

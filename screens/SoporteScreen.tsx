@@ -1,76 +1,140 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native'
+import { ref, push, set } from 'firebase/database'
+import { db } from '../firebase/Config'
 
 export default function SoporteScreen({ navigation }: any) {
+  const [nombre, setNombre] = useState('')
+  const [mensaje, setMensaje] = useState('')
+
+  const enviarSoporte = async () => {
+    if (!nombre || !mensaje) {
+      Alert.alert('Error', 'Por favor, llena todos los campos.')
+      return
+    }
+    try {
+      const soporteRef = ref(db, 'soporte')
+      const nuevoSoporteRef = push(soporteRef)
+      await set(nuevoSoporteRef, {
+        nombre,
+        mensaje,
+        fecha: new Date().toISOString(),
+      })
+      Alert.alert('¡Mensaje enviado!', 'Te responderemos pronto.')
+      setNombre('')
+      setMensaje('')
+    } catch (error) {
+      Alert.alert('Error', 'Error al enviar mensaje')
+    }
+  }
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Centro de Soporte</Text>
-      <Text style={styles.subtitle}>¿Tienes algún problema o duda? Estamos aquí para ayudarte.</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Soporte</Text>
 
-      <View style={styles.card}>
-        <Text style={styles.label}>📧 Correo de contacto:</Text>
-        <Text style={styles.texto}>soporte@masterclean.com</Text>
+      <View style={styles.content}>
+        <Text style={styles.text}>¿En qué podemos ayudarte?</Text>
 
-        <Text style={styles.label}>📱 Teléfono:</Text>
-        <Text style={styles.texto}>+593 99 427 1141</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Tu nombre"
+          value={nombre}
+          onChangeText={setNombre}
+        />
 
-        <Text style={styles.label}>⏰ Horarios de atención:</Text>
-        <Text style={styles.texto}>Lunes a Viernes, de 08h00 a 18h00</Text>
+        <TextInput
+          style={[styles.input, styles.textArea]}
+          placeholder="Describe tu problema o consulta"
+          value={mensaje}
+          onChangeText={setMensaje}
+          multiline
+          textAlignVertical="top"
+        />
+
+        <TouchableOpacity style={styles.boton} onPress={enviarSoporte} activeOpacity={0.8}>
+          <Text style={styles.botonTexto}>Enviar</Text>
+        </TouchableOpacity>
       </View>
-      
-    </ScrollView>
+
+      <TouchableOpacity style={[styles.boton, styles.botonSecundario]} onPress={() => navigation.goBack()} activeOpacity={0.8}>
+        <Text style={[styles.botonTexto, styles.botonTextoSecundario]}>Volver</Text>
+      </TouchableOpacity>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 20,
-    alignItems: 'center',
     backgroundColor: '#f0f8ff',
-    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
+    fontSize: 36,
+    fontWeight: '900',
     color: '#2e7d32',
-    marginBottom: 10,
+    marginBottom: 30,
+    textAlign: 'center',
+    letterSpacing: 1.5,
+  },
+  content: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 20,
+    color: '#333',
+    marginBottom: 15,
+    fontWeight: '600',
+  },
+  input: {
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 15,
+    fontSize: 18,
+    fontWeight: '500',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 5,
+  },
+  textArea: {
+    height: 120,
+  },
+  boton: {
+    backgroundColor: '#27ae60',
+    paddingVertical: 16,
+    borderRadius: 30,
+    marginTop: 10,
+    alignItems: 'center',
+    shadowColor: '#1b5e20',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 8,
+  },
+  botonTexto: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
+  botonSecundario: {
+    backgroundColor: '#e74c3c',
+    marginBottom: 30,
     marginTop: 20,
   },
-  subtitle: {
-    fontSize: 16,
-    color: '#555',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  label: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: '#333',
-    marginTop: 15,
-  },
-  texto: {
-    fontSize: 16,
-    color: '#555',
-  },
-  card: {
-    backgroundColor: '#ffffff',
-    width: '90%',
-    padding: 20,
-    borderRadius: 10,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    elevation: 3,
-  },
-  botonCancelar: {
-    backgroundColor: 'red',
-    paddingVertical: 10,
-    paddingHorizontal: 50,
-    borderRadius: 8,
-    marginTop: 30,
-  },
-  botonTextoCancelar: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+  botonTextoSecundario: {
+    color: '#fff',
   },
 })
+
