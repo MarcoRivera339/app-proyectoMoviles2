@@ -1,44 +1,27 @@
 {
-  "expo": {
-    "name": "Master Clean",
-    "slug": "app-proyecto",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/cleaning.png",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/cleaning.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/cleaning1.png",
-        "backgroundColor": "#ffffff"
+  "build": {
+    "production": {
+      "channel": "production",
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
       },
-      "edgeToEdgeEnabled": true,
-      "package": "com.marcorivera339.appproyecto"
-    },
-    "web": {
-      "favicon": "./assets/cleaning2.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "81af05ea-4fe1-48cb-a112-ccfc49f6641c"
+      "ios": {
+        "buildConfiguration": "Release"
       }
-    },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/81af05ea-4fe1-48cb-a112-ccfc49f6641c"
-    },
-    "plugins": [
-      "expo-font"
-    ]
-  }
+    }
+  },
+  "submit": {},
+  "extra": {
+    "eas": {
+      "projectId": "81af05ea-4fe1-48cb-a112-ccfc49f6641c"
+    }
+  },
+  "runtimeVersion": {
+    "policy": "appVersion"
+  },
+  "updates": {
+    "url": "https://u.expo.dev/81af05ea-4fe1-48cb-a112-ccfc49f6641c"
+  },
+  "android": {},
+  "ios": {}
 }
